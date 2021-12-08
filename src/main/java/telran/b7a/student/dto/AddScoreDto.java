@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
-public class UpdateDto {
-	String name;
-	String password;
+public class AddScoreDto {
+	String examName;
+	Integer score;
 
 }
