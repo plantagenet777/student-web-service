@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
-public class AddScoreDto {
+public class ScoreDto {
 	String examName;
 	Integer score;
 
