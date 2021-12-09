@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
-public class AddStudentDto {
+public class StudentCredentialsDto {
 	Integer id;
 	String name;
 	String password;
