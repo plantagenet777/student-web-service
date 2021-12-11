@@ -17,6 +17,7 @@ public class StudentServiceImp implements StudentService {
 	@Autowired
 	StudentRepository studentRepository;
 	
+	
 	@Override
 	public boolean addStudent(StudentCredentialsDto studentCredentialsDto) {
 		if(studentRepository.findById(studentCredentialsDto.getId()) != null) {
@@ -63,6 +64,7 @@ public class StudentServiceImp implements StudentService {
 		}
 		studentForUpdate.setName(updateStudentDto.getName());
 		studentForUpdate.setPassword(updateStudentDto.getPassword());
+		studentRepository.save(studentForUpdate);
 		return StudentCredentialsDto.builder()
 				.id(studentForUpdate.getId())
 				.name(studentForUpdate.getName())
@@ -76,7 +78,9 @@ public class StudentServiceImp implements StudentService {
 		if (studentForUpdate == null) {
 			return false;
 		}
-		return studentForUpdate.addScore(scoreDto.getExamName(), scoreDto.getScore());
+		studentForUpdate.addScore(scoreDto.getExamName(), scoreDto.getScore());
+		studentRepository.save(studentForUpdate);
+		return true;
 	}
 
 }
