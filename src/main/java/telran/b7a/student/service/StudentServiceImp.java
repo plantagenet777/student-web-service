@@ -9,6 +9,7 @@ import telran.b7a.student.dto.ScoreDto;
 import telran.b7a.student.dto.StudentCredentialsDto;
 import telran.b7a.student.dto.StudentDto;
 import telran.b7a.student.dto.UpdateStudentDto;
+import telran.b7a.student.dto.exception.StudentNotFoundException;
 import telran.b7a.student.model.Student;
 
 @Service
@@ -64,7 +65,7 @@ public class StudentServiceImp implements StudentService {
 		}
 		studentForUpdate.setName(updateStudentDto.getName());
 		studentForUpdate.setPassword(updateStudentDto.getPassword());
-		studentRepository.save(studentForUpdate);
+//		studentRepository.save(studentForUpdate);
 		return StudentCredentialsDto.builder()
 				.id(studentForUpdate.getId())
 				.name(studentForUpdate.getName())
@@ -76,10 +77,10 @@ public class StudentServiceImp implements StudentService {
 	public boolean addScore(Integer id, ScoreDto scoreDto) {
 		Student studentForUpdate = studentRepository.findById(id);
 		if (studentForUpdate == null) {
-			return false;
+			throw new StudentNotFoundException();
 		}
 		studentForUpdate.addScore(scoreDto.getExamName(), scoreDto.getScore());
-		studentRepository.save(studentForUpdate);
+//		studentRepository.save(studentForUpdate);
 		return true;
 	}
 
