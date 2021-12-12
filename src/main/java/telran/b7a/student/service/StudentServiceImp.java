@@ -1,5 +1,9 @@
 package telran.b7a.student.service;
 
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -80,6 +84,15 @@ public class StudentServiceImp implements StudentService {
 		studentForUpdate.addScore(scoreDto.getExamName(), scoreDto.getScore());
 //		studentRepository.save(studentForUpdate);
 		return true;
+	}
+
+	@Override
+	public List<StudentDto> findStudentsByName(String name) {
+		
+		return studentRepository.findAll().stream()
+				.filter(s -> name.equalsIgnoreCase(s.getName()))
+				.map(s -> modelMapper.map(s, StudentDto.class))
+				.collect(Collectors.toList());
 	}
 
 }
