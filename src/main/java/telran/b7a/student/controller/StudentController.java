@@ -19,9 +19,14 @@ import telran.b7a.student.service.StudentService;
 
 @RestController
 public class StudentController {
-	@Autowired // связывает ссылку с бином в апликационном контексте
+	
 	StudentService studentService;
 	
+	@Autowired // связывает ссылку с бином в апликационном контексте
+	public StudentController(StudentService studentService) {
+		this.studentService = studentService;
+	}
+
 	@PostMapping("/student")
 	public boolean studentRegister(@RequestBody StudentCredentialsDto studentCredentialsDto) {
 		return studentService.addStudent(studentCredentialsDto);
@@ -45,8 +50,7 @@ public class StudentController {
 	}
 	
 	@PutMapping("/score/student/{id}")
-	public boolean addScore(@PathVariable Integer id, 
-			@RequestBody ScoreDto scoreDto) {
+	public boolean addScore(@PathVariable Integer id, @RequestBody ScoreDto scoreDto) {
 		return studentService.addScore(id, scoreDto);
 	}
 	

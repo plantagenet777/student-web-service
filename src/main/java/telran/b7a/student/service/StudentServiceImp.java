@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import telran.b7a.student.dao.StudentMongoRepository;
 import telran.b7a.student.dao.StudentRepository;
 import telran.b7a.student.dto.ScoreDto;
 import telran.b7a.student.dto.StudentCredentialsDto;
@@ -21,13 +22,15 @@ import telran.b7a.student.model.Student;
 //@Component
 public class StudentServiceImp implements StudentService {
 	
-	@Autowired
-	StudentRepository studentRepository;
-	
-	@Autowired
+	StudentMongoRepository studentRepository;
 	ModelMapper modelMapper;
 	
-	
+	@Autowired
+	public StudentServiceImp(StudentMongoRepository studentRepository, ModelMapper modelMapper) {
+		this.studentRepository = studentRepository;
+		this.modelMapper = modelMapper;
+	}
+
 	@Override
 	public boolean addStudent(StudentCredentialsDto studentCredentialsDto) {
 		if(studentRepository.findById(studentCredentialsDto.getId()).isPresent()) {
@@ -70,7 +73,7 @@ public class StudentServiceImp implements StudentService {
 //		}
 		studentForUpdate.setName(updateStudentDto.getName());
 		studentForUpdate.setPassword(updateStudentDto.getPassword());
-//		studentRepository.save(studentForUpdate);
+		studentRepository.save(studentForUpdate);
 		return modelMapper.map(studentForUpdate, StudentCredentialsDto.class);
 	}
 
@@ -78,17 +81,16 @@ public class StudentServiceImp implements StudentService {
 	public boolean addScore(Integer id, ScoreDto scoreDto) {
 		Student studentForUpdate = studentRepository.findById(id)
 				.orElseThrow(() -> new StudentNotFoundException(id));
+		boolean res = studentForUpdate.addScore(scoreDto.getExamName(), scoreDto.getScore());
 //		if (studentForUpdate == null) {
 //			throw new StudentNotFoundException(id);
-//		}
-		studentForUpdate.addScore(scoreDto.getExamName(), scoreDto.getScore());
-//		studentRepository.save(studentForUpdate);
-		return true;
+//		}	
+		studentRepository.save(studentForUpdate);
+		return res;
 	}
 
 	@Override
 	public List<StudentDto> findStudentsByName(String name) {
-		
 		return studentRepository.findAll().stream()
 				.filter(s -> name.equalsIgnoreCase(s.getName()))
 				.map(s -> modelMapper.map(s, StudentDto.class))
