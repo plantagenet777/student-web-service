@@ -22,6 +22,8 @@ public interface StudentService {
 	
 	List<StudentDto> findStudentsByName(String name);
 	
+	long getStudentsNamesQuantity(List<String> names);
 	
+	List<StudentDto> getStudentsByExamScore(String exam, int score);
 
 }
